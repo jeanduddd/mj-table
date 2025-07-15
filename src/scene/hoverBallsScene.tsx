@@ -1,19 +1,11 @@
 import { useState, type SetStateAction, type Dispatch } from "react";
-import { useFrame } from "@react-three/fiber";
 import { Button } from "@react-three/uikit-default";
 import { Root, Text } from "@react-three/uikit";
 import * as THREE from "three";
-import { TeleportTarget } from "@react-three/xr";
 
 //unused scene, was made to create the table and use basic interactions
 
-export function HoverScene({
-    scene
-}: /*onTeleport*/
-{
-    scene: [string, Dispatch<SetStateAction<string>>];
-    /*onTeleport: Dispatch<SetStateAction<THREE.Vector3>>;*/
-}) {
+export function HoverScene({ scene }: { scene: [string, Dispatch<SetStateAction<string>>] }) {
     const [, setScene] = scene;
 
     //create the balls
@@ -43,14 +35,11 @@ export function HoverScene({
                     </Root>
                 </group>
             </group>
-
-            {/*<TeleportTarget onTeleport={onTeleport}>*/}
             {/*set the ground */}
             <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.5, 0]}>
                 <planeGeometry args={[10, 10]}></planeGeometry>
                 <meshStandardMaterial side={THREE.DoubleSide}></meshStandardMaterial>
             </mesh>
-            {/*</TeleportTarget>*/}
 
             <ambientLight intensity={0.7} />
 

@@ -1,6 +1,7 @@
-import { Container, Root, Text } from "@react-three/uikit";
-import { ContainerComponent } from "./containerComponent";
 import { useEffect, useState } from "react";
+import { Container, Root, Text } from "@react-three/uikit";
+
+import { ContainerComponent } from "./containerComponent";
 
 /**
  * create a menu to select the visual indication and the feedback effect we want to apply to the scene
@@ -58,7 +59,6 @@ export function Menu({
         { name: "arrows indication", setName: "arrows", selected: false },
         { name: "oriented arrows 1", setName: "arrows1", selected: false },
         { name: "oriented arrows 2", setName: "arrows2", selected: false },
-        //{ name: "mouvement", setName: "mouvement", selected: false },
         { name: "rays indication", setName: "rays", selected: false },
         { name: "glow indication", setName: "glow", selected: false },
         { name: "illuminated", setName: "illuminated", selected: false },

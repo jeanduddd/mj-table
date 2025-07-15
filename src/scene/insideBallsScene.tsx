@@ -1,11 +1,13 @@
 import { useState, type SetStateAction, type Dispatch, useEffect, useRef } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
-import { TeleportTarget, useXRInputSourceState } from "@react-three/xr";
+import { useXRInputSourceState } from "@react-three/xr";
+
 import { Menu } from "../components/menu/selectMenuComponent";
 import { Lamp } from "../components/tableEnvironment/lamp";
 import { Ball } from "../components/tableEnvironment/balls";
 import { isPinching, isPinchingMiddle } from "../utilities/handState";
+
 import { HandChangedEvent } from "../events/handChangedEvent";
 import { VisualIndicationChangedEvent } from "../events/visualIndicationChangedEvent";
 import { FeedbackEffectChangedEvent } from "../events/feedbackEffectChangedEvent";
@@ -13,11 +15,9 @@ import { FeedbackEffectChangedEvent } from "../events/feedbackEffectChangedEvent
 export function InsideScene({
     scene,
     eventHandler //transmit informations to the parent component
-}: /*onTeleport*/
-{
+}: {
     scene: [string, Dispatch<SetStateAction<string>>];
     eventHandler: (event: Event) => void;
-    /*onTeleport: Dispatch<SetStateAction<THREE.Vector3>>;*/
 }) {
     const { gl } = useThree() as { gl: THREE.WebGLRenderer & { xr: any } };
     const referenceSpace = gl.xr.getReferenceSpace();
@@ -270,10 +270,6 @@ export function InsideScene({
     //get the user camera
     const { camera } = useThree();
     const [cameraPosition, setCameraPosition] = useState(camera.position);
-    const [cameraDirection, setCameraDirection] = useState(camera.position);
-    const [cameraQuaternion, setCameraQuaternion] = useState(camera.quaternion);
-
-    const [menuPos, setMenuPos] = useState(camera.position);
 
     //get camera position
     useFrame(() => {
@@ -292,13 +288,11 @@ export function InsideScene({
 
     return (
         <>
-            {/*<TeleportTarget onTeleport={onTeleport}>*/}
             {/*display the ground */}
             <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.5, 0]}>
                 <planeGeometry args={[10, 10]}></planeGeometry>
                 <meshStandardMaterial side={THREE.DoubleSide}></meshStandardMaterial>
             </mesh>
-            {/*</TeleportTarget>*/}
             {/*display either the menu at the same height of the player or the table with the balls */}
             {showMenu ? (
                 <>

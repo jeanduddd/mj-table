@@ -1,7 +1,7 @@
 import * as THREE from "three";
-import { Line } from "@react-three/drei";
 import { useState } from "react";
 import { useFrame } from "@react-three/fiber";
+import { Line } from "@react-three/drei";
 
 /**
  * draw a curved ray with moving particules

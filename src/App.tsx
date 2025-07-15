@@ -1,27 +1,27 @@
-import { PointerRayModel, XR } from "@react-three/xr";
-import { createXRStore, XROrigin } from "@react-three/xr";
 import { useState, useRef, useEffect } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { OrbitControls, PerspectiveCamera } from "@react-three/drei";
-import { XRHandModel } from "@react-three/xr";
+import {
+    XR,
+    createXRStore,
+    XROrigin,
+    XRHandModel,
+    PointerRayModel,
+    PointerCursorModel
+} from "@react-three/xr";
+import * as THREE from "three";
+
 import { LampScene } from "./scene/lampScene";
 import { HoverScene } from "./scene/hoverBallsScene";
 import { InsideScene } from "./scene/insideBallsScene";
 import { RotatePlayer } from "./xrControls/RotatePlayer";
 import { FlyPlayer } from "./xrControls/FlyPlayer";
-import { MovePlayer } from "./xrControls/MovePlayer";
-import * as THREE from "three";
-import "./style/App.css";
+
 import { HandChangedEvent } from "./events/handChangedEvent";
 import { FeedbackEffectChangedEvent } from "./events/feedbackEffectChangedEvent";
 import { VisualIndicationChangedEvent } from "./events/visualIndicationChangedEvent";
 
-/*
-const store = createXRStore({
-    hand: { teleportPointer: true},
-    controller: { teleportPointer: true }
-});
-*/
+import "./style/App.css";
 
 /**
  * change the color of the hand
@@ -199,19 +199,11 @@ export default function App() {
                     <XROrigin ref={xrOrigin} position={position} />
                     <OrbitControls />
                     <XRSpaceManager scene={scene} xrOrigin={xrOrigin} />
-                    {scene === "lamp" && (
-                        <LampScene scene={[scene, setScene]} /*onTeleport={setPosition}*/ />
-                    )}
-                    {scene === "hover" && (
-                        <HoverScene scene={[scene, setScene]} /*onTeleport={setPosition} */ />
-                    )}
+                    {scene === "lamp" && <LampScene scene={[scene, setScene]} />}
+                    {scene === "hover" && <HoverScene scene={[scene, setScene]} />}
                     {scene === "collision" && (
-                        <InsideScene
-                            scene={[scene, setScene]}
-                            eventHandler={eventHandler} /*onTeleport={setPosition}*/
-                        />
+                        <InsideScene scene={[scene, setScene]} eventHandler={eventHandler} />
                     )}
-                    {/*<MovePlayer xrOrigin={xrOrigin} />*/}
                     <FlyPlayer xrOrigin={xrOrigin} />
                     <RotatePlayer />
                 </XR>

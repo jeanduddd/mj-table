@@ -1,6 +1,6 @@
+import { useState } from "react";
 import { useFrame } from "@react-three/fiber";
 import { Container, Text } from "@react-three/uikit";
-import { useState } from "react";
 
 /**
  * display a feeback/indication and indicated if it is currently selected or not

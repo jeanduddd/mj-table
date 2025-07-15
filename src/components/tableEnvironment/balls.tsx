@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
+
 import { Arrow } from "./arrow";
 import { CurvedRayIndication, LinearRayIndication } from "./rayIndicator";
-import { color } from "three/tsl";
 import { OrientedArrow1 } from "./orientedArrow1";
 import { OrientedArrow2 } from "./orientedArrow2";
 
@@ -101,11 +101,9 @@ export function Ball({
             setLastDisabled(new Date());
         }
         //set the correct height depending of the selected visual indication
-        if (visualIndication === "mouvement" && value.select === true) {
-            setHeight(0.7 + Math.abs(Math.sin(Date.now() * 0.002)) * 0.3);
-        } else if (visualIndication === "pedestal" && value.select === true) {
+        else if (visualIndication === "pedestal" && value.select === true) {
             setHeight(0.7);
-        } else if (visualIndication !== "mouvement" && !value.select) {
+        } else if (!value.select) {
             setHeight(0.65);
         } else {
             setHeight(0.65);
@@ -167,8 +165,7 @@ export function Ball({
                     ) : null}
                     {/*selected visual indication an indication that doesn't show if the left or right hand have to pick up the ball */}
                     {points &&
-                    (visualIndication === "mouvement" ||
-                        visualIndication === "glow" ||
+                    (visualIndication === "glow" ||
                         visualIndication === "illuminated" ||
                         visualIndication === "pedestal") ? (
                         <LinearRayIndication
@@ -350,25 +347,6 @@ export function Ball({
                                 ></pointLight>
                             </group>
                         </>
-                    ) : null}
-                    {/*selected visual indication is mouvement */}
-                    {visualIndication === "mouvement" ? (
-                        <mesh position={spherePos}>
-                            <sphereGeometry args={[0.15, 32, 32]} />
-                            {feedbackEffect === "gray" ? (
-                                <meshStandardMaterial
-                                    color={
-                                        leftIsNear || rightIsNear
-                                            ? wasCorrect
-                                                ? value.color
-                                                : "gray"
-                                            : value.color
-                                    }
-                                />
-                            ) : (
-                                <meshStandardMaterial color={value.color}></meshStandardMaterial>
-                            )}
-                        </mesh>
                     ) : null}
                     {/*selected visual indication is pedestal */}
                     {visualIndication === "pedestal" ? (

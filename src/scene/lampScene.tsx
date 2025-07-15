@@ -1,10 +1,8 @@
 import { useState, useRef, type SetStateAction, type Dispatch } from "react";
-import { useFrame } from "@react-three/fiber";
-import { useLoader } from "@react-three/fiber";
+import { useFrame, useLoader } from "@react-three/fiber";
 import { Button } from "@react-three/uikit-default";
 import { Root, Text } from "@react-three/uikit";
 import * as THREE from "three";
-import { TeleportTarget } from "@react-three/xr";
 
 //unused scene for the table, was made to discover react three fiber
 
@@ -42,13 +40,7 @@ function Lamp({ bool }: { bool: boolean }) {
     );
 }
 
-export function LampScene({
-    scene
-}: /*onTeleport*/
-{
-    scene: [string, Dispatch<SetStateAction<string>>];
-    /*onTeleport: Dispatch<SetStateAction<THREE.Vector3>>;*/
-}) {
+export function LampScene({ scene }: { scene: [string, Dispatch<SetStateAction<string>>] }) {
     //load an imported texture
     const colorMap = useLoader(THREE.TextureLoader, "./assets/wall.jpg");
 
@@ -89,13 +81,11 @@ export function LampScene({
                 <boxGeometry args={[1, 1, 1]}></boxGeometry>
                 <meshStandardMaterial map={colorMap}></meshStandardMaterial>
             </mesh>
-            {/*<TeleportTarget onTeleport={onTeleport}>*/}
             {/*the ground of the scene */}
             <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -1, 0]}>
                 <planeGeometry args={[10, 10]}></planeGeometry>
                 <meshStandardMaterial side={THREE.DoubleSide}></meshStandardMaterial>
             </mesh>
-            {/*</TeleportTarget>*/}
         </>
     );
 }
