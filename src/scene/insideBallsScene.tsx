@@ -32,8 +32,11 @@ export function InsideScene({
     useFrame((_, __, frame) => {
         const pinchMiddle = isPinchingMiddle(right, frame, referenceSpace);
         setPinchMiddle(pinchMiddle);
-        pinchMiddle?setLastPinch(new Date()):null;
-        if (pinchMiddle && (lastPinch == null || new Date().getTime() - lastPinch!?.getTime() > 300)) {
+        pinchMiddle ? setLastPinch(new Date()) : null;
+        if (
+            pinchMiddle &&
+            (lastPinch == null || new Date().getTime() - lastPinch!?.getTime() > 300)
+        ) {
             setShowMenu((prev) => !prev);
         }
     });

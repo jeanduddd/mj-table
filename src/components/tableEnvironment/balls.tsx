@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import { Arrow } from "./arrow";
-import { RayIndication } from "./rayIndicator";
+import { CurvedRayIndication, LinearRayIndication } from "./rayIndicator";
 import { color } from "three/tsl";
 import { OrientedArrow1 } from "./orientedArrow1";
 import { OrientedArrow2 } from "./orientedArrow2";
@@ -127,11 +127,11 @@ export function Ball({
                                     ></meshStandardMaterial>
                                 )}
                             </mesh>
-                            <RayIndication
+                            <CurvedRayIndication
                                 beginPosition={points[1]}
                                 endPosition={points[0]}
                                 color={value.color}
-                            ></RayIndication>
+                            ></CurvedRayIndication>
                         </>
                     ) : null}
                     {points &&
@@ -139,11 +139,11 @@ export function Ball({
                         visualIndication === "glow" ||
                         visualIndication === "illuminated" ||
                         visualIndication === "pedestal") ? (
-                        <RayIndication
+                        <LinearRayIndication
                             beginPosition={points[1]}
                             endPosition={points[0]}
                             color={value.LoR ? "#e43e6f" : "#1ec71e"}
-                        ></RayIndication>
+                        ></LinearRayIndication>
                     ) : null}
 
                     {visualIndication === "arrows" ? (

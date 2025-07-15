@@ -3,7 +3,7 @@ import { Line } from "@react-three/drei";
 import { useState } from "react";
 import { useFrame } from "@react-three/fiber";
 
-export function RayIndication({
+export function CurvedRayIndication({
     beginPosition,
     endPosition,
     color
@@ -133,16 +133,7 @@ export function RayIndication({
     );
 }
 
-/*<mesh>
-            <Line points={[beginPosition,endPosition]} lineWidth={10} color={color} transparent opacity={0.3}></Line>
-        </mesh>*/
-
-/*import * as THREE from "three";
-import { Line, Point, useFBO } from "@react-three/drei";
-import { useState } from "react";
-import { useFrame } from "@react-three/fiber";
-
-export function RayIndication({
+export function LinearRayIndication({
     beginPosition,
     endPosition,
     color
@@ -152,21 +143,29 @@ export function RayIndication({
     color: string;
 }) {
 
+    const totalBoxes = 50
+
     const curve = new THREE.CatmullRomCurve3([beginPosition, endPosition]);
-    const [points,setPoints] = useState(curve.getPoints(50));
+    const [points,setPoints] = useState(curve.getPoints(totalBoxes));
 
     const [lineDirection, setLineDirection] = useState((endPosition.clone().sub(beginPosition).normalize()))
 
-    const [randomX, setRandomX] = useState()
-
+    
+    const [offset, setOffset] = useState(0);
 
     useFrame(()=>{
         setLineDirection(endPosition.clone().sub(beginPosition).normalize());
+        
+        setPoints(
+            Array.from({ length: totalBoxes }, (_, i) => {
+                const t = (i / totalBoxes + offset) % 1;
+                const point = curve.getPointAt(t);
+                return point;
+            })
+        );
 
-        //setPoints
-    
-        //setPoints(points.map((value, index) => (value.sub(lineDirection.clone().multiplyScalar(0.005)))))  
-    })
+        setOffset((offset + 0.002) % 1);
+})
 
     return (
         <>
