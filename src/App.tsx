@@ -6,7 +6,7 @@ import { OrbitControls, PerspectiveCamera } from "@react-three/drei";
 import { XRHandModel } from "@react-three/xr";
 import { LampScene } from "./scene/lampScene";
 import { HoverScene } from "./scene/hoverBallsScene";
-import { InsideScene } from "./scene/insideBallsSceneRemake";
+import { InsideScene } from "./scene/insideBallsScene";
 import { RotatePlayer } from "./xrControls/RotatePlayer";
 import { FlyPlayer } from "./xrControls/FlyPlayer";
 import { MovePlayer } from "./xrControls/MovePlayer";
@@ -23,17 +23,28 @@ const store = createXRStore({
 });
 */
 
+/**
+ * change the color of the hand
+ * @param side side of the hand
+ * @param color color of the hand
+ * @returns XRHand with updated material color
+ */
 function CustomHand({ side, color }: { side: "left" | "right"; color: string }) {
     const handRef = useRef<THREE.Group>(null!);
 
     useEffect(() => {
         if (handRef.current) {
+            //go throught every child
             handRef.current.traverse((child) => {
+                //look if it is a mesh
                 if (child instanceof THREE.Mesh) {
                     if (child.material instanceof THREE.Material) {
+                        //copy its mesh
                         const oldMat = child.material;
                         const newMat = oldMat.clone();
+                        //change the color of the mesh
                         (newMat as THREE.MeshStandardMaterial).color.set(color);
+                        //apply the mesh with the new color
                         child.material = newMat;
                     }
                 }
@@ -49,6 +60,7 @@ function CustomHand({ side, color }: { side: "left" | "right"; color: string }) 
     );
 }
 
+//variables containing the current hand color, the can change
 let leftHandColor = "pink";
 let rightHandColor = "lightgreen";
 
@@ -56,6 +68,7 @@ const LeftHand = () => <CustomHand side="left" color={leftHandColor} />;
 const RightHand = () => <CustomHand side="right" color={rightHandColor} />;
 
 /*
+//XRStore to apply custom hands
 const store = createXRStore({
     hand: {
         left: LeftHand,
@@ -64,8 +77,9 @@ const store = createXRStore({
     }
 });
 */
-const store = createXRStore({ hand: { rayPointer: { rayModel: { color: "red" } } } });
 
+//XRStore to get custom ray pointers
+const store = createXRStore({ hand: { rayPointer: { rayModel: { color: "red" } } } });
 
 function XRSpaceManager({ scene, xrOrigin }: { scene: string; xrOrigin: React.RefObject<any> }) {
     const { gl } = useThree() as { gl: THREE.WebGLRenderer & { xr: any } };
@@ -106,36 +120,53 @@ function XRSpaceManager({ scene, xrOrigin }: { scene: string; xrOrigin: React.Re
 }
 
 export default function App() {
+    //define an initial position to be in front of the table when we launch the program (only for x and z coordinates)
     const [position, setPosition] = useState(new THREE.Vector3(0, 0, -1.5));
 
     const xrOrigin: any = useRef(null);
     const [scene, setScene] = useState<string>("collision");
 
+    //every informations needed to change correctly hand color
     const [feedbackEffect, setFeedbackEffect] = useState<string>("gray");
     const [visualIndication, setVisualIndication] = useState<string>("arrows");
-    const [LoR, setLoR] = useState(true);
+    const [LoR, setLoR] = useState(true); //LoR = Left or Right, Left = true, Right = false
     const [targetColor, setTargetColor] = useState("red");
 
+    /**
+     * change leftHandColor and rightHandColor variables in order to change the hand color inside the scene
+     * @param visualIndication string representing the current visual indication
+     * @param LoR boolean representing if the ball has to be taken by the left or right hand
+     * @param targetColor string representing the color of the ball that has to be taken
+     */
     function updateHandsColor(visualIndication: string, LoR: boolean, targetColor: string) {
+        //visual indications that use a color to show if the ball has to be taken by the left or right hand
         if (
             visualIndication === "arrows" ||
             visualIndication === "arrows1" ||
             visualIndication === "arrows2"
         ) {
+            //if the ball has to be taken by the left hand, leftHandColor is set to pink and rightHandColor is set to gray
             leftHandColor = LoR ? "pink" : "gray";
+            //if the ball has to be taken by the right hand, leftHandColor is set to gray and rightHandColor is set to lightgreen
             rightHandColor = LoR ? "gray" : "lightgreen";
         }
+        //visual indications that use don't show whether the ball should be taken with the left or right hand
         if (
             visualIndication === "rays" ||
             visualIndication === "glow" ||
             visualIndication === "illuminated" ||
             visualIndication === "pedestal"
         ) {
+            //the hand that must take the ball is colored by the color of the ball that has to be picked up
             leftHandColor = LoR ? targetColor : "gray";
             rightHandColor = LoR ? "gray" : targetColor;
         }
     }
 
+    /**
+     * recieve events that will change variables needed to set the color
+     * @param event custom event containing information to set the variables needed to set the color
+     */
     function eventHandler(event: Event) {
         if (event instanceof HandChangedEvent) {
             const eventLoR = event.getLoR();
@@ -158,21 +189,6 @@ export default function App() {
             setVisualIndication(event.getvisualIndication());
         }
     }
-
-    //useEffect(()=>{updateHandsColor(visualIndication,LoR,targetColor)},[])
-    /*{ name: "arrows indication", setName: "arrows", selected: false },
-        { name: "oriented arrows 1", setName: "arrows1", selected: false },
-        { name: "oriented arrows 2", setName: "arrows2", selected: false },
-        //{ name: "mouvement", setName: "mouvement", selected: false },
-        { name: "rays indication", setName: "rays", selected: false },
-        { name: "glow indication", setName: "glow", selected: false },
-        { name: "illuminated", setName: "illuminated", selected: false },
-        { name: "pedestal", setName: "pedestal", selected: false } */
-
-    /*        { name: "lamps", setName: "lamps", selected: false },
-        { name: "gray balls", setName: "gray", selected: false },
-        { name: "disable balls", setName: "disable", selected: false },
-        { name: "vibration", setName: "vibrate", selected: false } */
 
     return (
         <div className="canvas-container">

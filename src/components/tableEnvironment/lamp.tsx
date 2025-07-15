@@ -1,13 +1,17 @@
 import { useRef } from "react";
 import * as THREE from "three";
 
+/**
+ * create a light that can change color
+ * @param light boolean or null representing the color of the light. null = white, true = green, false = red
+ */
 export function Lamp({ light }: { light: boolean | null }) {
     const lamp = useRef<THREE.Group>(null);
-    const angle = 0;
 
     return (
         <group ref={lamp} position={[0, 0, 0]}>
-            <group rotation={[-angle, angle, 0]}>
+            <group rotation={[0, 0, 0]}>
+                {/*apply the correct light color */}
                 {light === null ? (
                     <pointLight position={[0, 0, -0.2]} color="white" intensity={10} distance={6} />
                 ) : light === true ? (

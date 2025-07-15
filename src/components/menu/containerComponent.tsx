@@ -2,6 +2,12 @@ import { useFrame } from "@react-three/fiber";
 import { Container, Text } from "@react-three/uikit";
 import { useState } from "react";
 
+/**
+ * display a feeback/indication and indicated if it is currently selected or not
+ * @param name name of the feeback/indication that has to be displayed
+ * @param selected indicated if the displayed feeback/indication is currently selected
+ * @function onPress indicate to the parent component that this feeback/indication has been selected
+ */
 export function ContainerComponent({
     name,
     selected,
@@ -11,16 +17,20 @@ export function ContainerComponent({
     selected: boolean;
     onPress: () => void;
 }) {
+    //background color
     const [color, setColor] = useState("white");
+    //indicates if the component is hovered
     const [hover, setHover] = useState(false);
-
+    //indicates the last time we clicked on the component
     const [lastClick, setLastClick] = useState<Date | null>(null);
 
     useFrame(() => {
+        //set the background color to green for a few milliseconds when the component is clicked
         if (new Date().getTime() - lastClick!?.getTime() < 300) {
             setColor("lightgreen");
             onPress();
         } else {
+            //set the background color to gray if the component is hovered, white instead
             hover ? setColor("#CCCCCC") : setColor("white");
         }
     });
@@ -33,7 +43,6 @@ export function ContainerComponent({
             height={25}
             backgroundColor={color}
             positionType={"relative"}
-            //alignItems={"center"}
             onClick={() => {
                 setLastClick(new Date());
             }}
@@ -52,6 +61,7 @@ export function ContainerComponent({
                 onPointerEnter={() => setHover(true)}
                 onPointerLeave={() => setHover(false)}
             >
+                {/*display a dot before the name of the feeback/indication if it is currently selected */}
                 {selected ? "." : ""}
             </Text>
             <Text

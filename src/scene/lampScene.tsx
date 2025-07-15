@@ -6,9 +6,17 @@ import { Root, Text } from "@react-three/uikit";
 import * as THREE from "three";
 import { TeleportTarget } from "@react-three/xr";
 
+//unused scene for the table, was made to discover react three fiber
+
+/**
+ * create a lamp
+ * @param bool boolean indicating if the light has to be switched on or off
+ * @returns a lamp component
+ */
 function Lamp({ bool }: { bool: boolean }) {
     const lamp = useRef<THREE.Group>(null);
     const angle = Math.PI / 4;
+    //rotate the lamp around y axis on each frame
     useFrame(() => {
         if (lamp.current) {
             lamp.current.rotation.y += 0.01;
@@ -17,6 +25,7 @@ function Lamp({ bool }: { bool: boolean }) {
     return (
         <group ref={lamp} position={[0, 0, 0]}>
             <group rotation={[-angle, angle, 0]}>
+                {/* draw or not a light point depending on the function parameter */}
                 {bool ? (
                     <pointLight position={[0, 0, 3.8]} color="red" intensity={50} distance={15} />
                 ) : null}
@@ -34,12 +43,13 @@ function Lamp({ bool }: { bool: boolean }) {
 }
 
 export function LampScene({
-    scene,
-    /*onTeleport*/
-}: {
+    scene
+}: /*onTeleport*/
+{
     scene: [string, Dispatch<SetStateAction<string>>];
     /*onTeleport: Dispatch<SetStateAction<THREE.Vector3>>;*/
 }) {
+    //load an imported texture
     const colorMap = useLoader(THREE.TextureLoader, "./assets/wall.jpg");
 
     const [switchOn, setSwitchOn] = useState(true);
@@ -47,6 +57,7 @@ export function LampScene({
 
     return (
         <>
+            {/*buttuns to change scene */}
             <group position={[0, 0, -2]}>
                 <group position={[-1, 0, 0]}>
                     <Root>
@@ -68,6 +79,7 @@ export function LampScene({
 
             <Lamp bool={switchOn}></Lamp>
 
+            {/* create a textured cube that switch on/off the light when we click on it*/}
             <mesh
                 onClick={(e) => {
                     setSwitchOn(!switchOn);
@@ -78,10 +90,11 @@ export function LampScene({
                 <meshStandardMaterial map={colorMap}></meshStandardMaterial>
             </mesh>
             {/*<TeleportTarget onTeleport={onTeleport}>*/}
-                <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -1, 0]}>
-                    <planeGeometry args={[10, 10]}></planeGeometry>
-                    <meshStandardMaterial side={THREE.DoubleSide}></meshStandardMaterial>
-                </mesh>
+            {/*the ground of the scene */}
+            <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -1, 0]}>
+                <planeGeometry args={[10, 10]}></planeGeometry>
+                <meshStandardMaterial side={THREE.DoubleSide}></meshStandardMaterial>
+            </mesh>
             {/*</TeleportTarget>*/}
         </>
     );
