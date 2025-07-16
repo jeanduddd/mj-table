@@ -127,13 +127,13 @@ export function LinearRayIndication({
     beginPosition,
     endPosition,
     color
-}: {
+}: { 
     beginPosition: THREE.Vector3;
     endPosition: THREE.Vector3;
     color: string;
 }) {
     //number of particules that will be drawn
-    const totalBoxes = 50;
+    const totalBoxes = 20;
 
     //curve that the partucles will follow
     const curve = new THREE.CatmullRomCurve3([beginPosition, endPosition]);

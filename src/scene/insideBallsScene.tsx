@@ -276,15 +276,7 @@ export function InsideScene({
         const position = new THREE.Vector3();
         camera.getWorldPosition(position);
         setCameraPosition(position);
-
-        menuRef.current?.position.copy(camera.position);
-        menuRef.current?.rotation.copy(camera.rotation);
-
-        const offset = camera.getWorldDirection(new THREE.Vector3()).multiplyScalar(2);
-        menuRef.current?.position.add(offset);
     });
-
-    const menuRef = useRef<THREE.Group>(null);
 
     return (
         <>

@@ -1,14 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { OrbitControls, PerspectiveCamera } from "@react-three/drei";
-import {
-    XR,
-    createXRStore,
-    XROrigin,
-    XRHandModel,
-    PointerRayModel,
-    PointerCursorModel
-} from "@react-three/xr";
+import { XR, createXRStore, XROrigin, XRHandModel } from "@react-three/xr";
 import * as THREE from "three";
 
 import { LampScene } from "./scene/lampScene";
@@ -39,11 +32,12 @@ function CustomHand({ side, color }: { side: "left" | "right"; color: string }) 
                 //look if it is a mesh
                 if (child instanceof THREE.Mesh) {
                     if (child.material instanceof THREE.Material) {
-                        //copy its mesh
+                        //copy the mesh
                         const oldMat = child.material;
                         const newMat = oldMat.clone();
                         //change the color of the mesh
                         (newMat as THREE.MeshStandardMaterial).color.set(color);
+                        //(newMat as THREE.MeshStandardMaterial).wireframe=(true)
                         //apply the mesh with the new color
                         child.material = newMat;
                     }
@@ -55,32 +49,31 @@ function CustomHand({ side, color }: { side: "left" | "right"; color: string }) 
     return (
         <>
             <XRHandModel ref={handRef}></XRHandModel>
-            {/*<PointerRayModel pointer={}></PointerRayModel>*/}
+            {/*<PointerRayModel pointer={pointer}></PointerRayModel>*/}
         </>
     );
 }
 
-//variables containing the current hand color, the can change
+//variables containing the current hand color, can change
 let leftHandColor = "pink";
 let rightHandColor = "lightgreen";
 
 const LeftHand = () => <CustomHand side="left" color={leftHandColor} />;
 const RightHand = () => <CustomHand side="right" color={rightHandColor} />;
 
-/*
 //XRStore to apply custom hands
 const store = createXRStore({
     hand: {
         left: LeftHand,
-        right: RightHand,
-        //rayPointer:{rayModel:{color:"blue"}}
+        right: RightHand
+        //rayPointer: { rayModel: { color: "blue" } }
     }
 });
-*/
 
+/*
 //XRStore to get custom ray pointers
 const store = createXRStore({ hand: { rayPointer: { rayModel: { color: "red" } } } });
-
+*/
 function XRSpaceManager({ scene, xrOrigin }: { scene: string; xrOrigin: React.RefObject<any> }) {
     const { gl } = useThree() as { gl: THREE.WebGLRenderer & { xr: any } };
     const initialReferenceSpace = useRef<XRReferenceSpace | null>(null);
@@ -192,7 +185,9 @@ export default function App() {
 
     return (
         <div className="canvas-container">
-            <button onClick={() => store.enterVR()}>Enter VR</button>
+            <button onClick={() => store.enterVR()} style={{ height: 50, width: 100 }}>
+                Enter VR
+            </button>
             <Canvas style={{ background: "skyblue" }}>
                 <XR store={store}>
                     <PerspectiveCamera position={[0, 4, 10]} makeDefault />
