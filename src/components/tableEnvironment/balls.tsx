@@ -6,6 +6,8 @@ import { Arrow } from "./arrow";
 import { CurvedRayIndication, LinearRayIndication } from "./rayIndicator";
 import { OrientedArrow1 } from "./orientedArrow1";
 import { OrientedArrow2 } from "./orientedArrow2";
+import { CustomHand } from "./customHand";
+//import { CustomHand } from "./customHand";
 
 /**
  * draw a ball with different possible displays
@@ -16,6 +18,7 @@ import { OrientedArrow2 } from "./orientedArrow2";
  * @function onNear used when a controller is next to a ball
  * @param visualIndication name of the current visual indication
  * @param feedbackEffect name of the current feedback effect
+ * @param handModel geometry of the correct (left or right) hand that has to be displayed
  */
 export function Ball({
     value,
@@ -24,7 +27,8 @@ export function Ball({
     leftControllerPos,
     onNear,
     visualIndication,
-    feedbackEffect
+    feedbackEffect,
+    handModel
 }: {
     value: { name: string; color: string; select: boolean; LoR: boolean | null };
     index: number;
@@ -33,6 +37,7 @@ export function Ball({
     onNear: (correct: boolean | null) => void;
     visualIndication: string;
     feedbackEffect: string;
+    handModel: any;
 }) {
     //height of the ball relative to the table
     const [height, setHeight] = useState(0.7);
@@ -387,6 +392,59 @@ export function Ball({
                                 ></meshStandardMaterial>
                             </mesh>
                         </>
+                    ) : null}
+                    {visualIndication === "H&B" ? (
+                        <mesh position={[index * 0.35 - 0.35, height, 0]}>
+                            <sphereGeometry args={[0.15, 32, 32]} />
+                            {feedbackEffect === "gray" ? (
+                                <meshStandardMaterial
+                                    color={
+                                        leftIsNear || rightIsNear
+                                            ? wasCorrect
+                                                ? value.color
+                                                : "gray"
+                                            : value.color
+                                    }
+                                />
+                            ) : (
+                                <meshStandardMaterial color={value.color}></meshStandardMaterial>
+                            )}
+                        </mesh>
+                    ) : null}
+                    {visualIndication === "handsOnBall" ? (
+                        <mesh position={spherePos}>
+                            <sphereGeometry args={[0.15, 32, 32]} />
+                            {feedbackEffect === "gray" ? (
+                                <meshStandardMaterial
+                                    color={
+                                        leftIsNear || rightIsNear
+                                            ? wasCorrect
+                                                ? value.color
+                                                : "gray"
+                                            : value.color
+                                    }
+                                />
+                            ) : (
+                                <meshStandardMaterial color={value.color}></meshStandardMaterial>
+                            )}
+
+                            <group
+                                //position={value.LoR ? [-0.08, 0.1, 0.05] : [0.08, 0.1, 0.05]}
+                                // rotation={
+                                //     value.LoR
+                                //         ? [(Math.PI / 6) * 4, -Math.PI / 4.5, Math.PI / 6]
+                                //         : [(Math.PI / 6) * 4, Math.PI / 4.5, -Math.PI / 6]
+                                // }
+                            >
+                                <CustomHand
+                                    LoR={value.LoR!}
+                                    position={spherePosInWorld}
+                                    handModel={handModel}
+                                ></CustomHand>
+                            </group>
+
+                            {/*<CustomHand side="left" color={"gray"}></CustomHand>*/}
+                        </mesh>
                     ) : null}
                 </>
             ) : (

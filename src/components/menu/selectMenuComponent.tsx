@@ -62,7 +62,9 @@ export function Menu({
         { name: "rays indication", setName: "rays", selected: false },
         { name: "glow indication", setName: "glow", selected: false },
         { name: "illuminated", setName: "illuminated", selected: false },
-        { name: "pedestal", setName: "pedestal", selected: false }
+        { name: "pedestal", setName: "pedestal", selected: false },
+        { name: "color hand & ball", setName: "H&B", selected: false },
+        { name: "hands on the ball", setName: "handsOnBall", selected: false }
     ]);
 
     //list of every existing feedback effect

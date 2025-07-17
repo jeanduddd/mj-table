@@ -14,10 +14,14 @@ import { FeedbackEffectChangedEvent } from "../events/feedbackEffectChangedEvent
 
 export function InsideScene({
     scene,
-    eventHandler //transmit informations to the parent component
+    eventHandler, //transmit informations to the parent component
+    leftHandGeom,
+    rightHandGeom
 }: {
     scene: [string, Dispatch<SetStateAction<string>>];
     eventHandler: (event: Event) => void;
+    leftHandGeom: any;
+    rightHandGeom: any;
 }) {
     const { gl } = useThree() as { gl: THREE.WebGLRenderer & { xr: any } };
     const referenceSpace = gl.xr.getReferenceSpace();
@@ -253,7 +257,7 @@ export function InsideScene({
 
     //define the current feedback/indication when we start the program
     const [feedbackEffect, setFeedbackEffect] = useState("gray");
-    const [visualIndication, setVisualIndication] = useState("arrows");
+    const [visualIndication, setVisualIndication] = useState("handsOnBall");
 
     //create an event and notify the parent component that the visual indication has changed
     useEffect(() => {
@@ -348,6 +352,7 @@ export function InsideScene({
                                 onNear={(correct: boolean | null) => handleNear(index, correct)}
                                 visualIndication={visualIndication}
                                 feedbackEffect={feedbackEffect}
+                                handModel={value.LoR ? leftHandGeom : rightHandGeom}
                             />
                         ))}
                     </mesh>

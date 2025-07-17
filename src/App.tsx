@@ -15,6 +15,11 @@ import { FeedbackEffectChangedEvent } from "./events/feedbackEffectChangedEvent"
 import { VisualIndicationChangedEvent } from "./events/visualIndicationChangedEvent";
 
 import "./style/App.css";
+import { MovePlayer } from "./xrControls/MovePlayer";
+
+const LeftHandGeomRef = { current: null };
+
+const RightHandGeomRef = { current: null };
 
 /**
  * change the color of the hand
@@ -46,10 +51,31 @@ function CustomHand({ side, color }: { side: "left" | "right"; color: string }) 
         }
     }, [color]);
 
+    //copy the left and right hand geometry
+    useEffect(() => {
+        if (!handRef.current) return;
+
+        //go throught every child
+        handRef.current.traverse((child) => {
+            //if it is a mesh and the geometry hasn't been already cloned, clone the geometry
+            if (child instanceof THREE.Mesh && !LeftHandGeomRef.current) {
+                if (side === "left") {
+                    const cloned = child.geometry.clone();
+                    LeftHandGeomRef.current = cloned;
+                }
+            }
+            if (child instanceof THREE.Mesh && !RightHandGeomRef.current) {
+                if (side === "right") {
+                    const cloned = child.geometry.clone();
+                    RightHandGeomRef.current = cloned;
+                }
+            }
+        });
+    }, []);
+
     return (
         <>
-            <XRHandModel ref={handRef}></XRHandModel>
-            {/*<PointerRayModel pointer={pointer}></PointerRayModel>*/}
+            <XRHandModel ref={handRef} />
         </>
     );
 }
@@ -136,7 +162,8 @@ export default function App() {
         if (
             visualIndication === "arrows" ||
             visualIndication === "arrows1" ||
-            visualIndication === "arrows2"
+            visualIndication === "arrows2" ||
+            visualIndication === "handsOnBall"
         ) {
             //if the ball has to be taken by the left hand, leftHandColor is set to pink and rightHandColor is set to gray
             leftHandColor = LoR ? "pink" : "gray";
@@ -148,7 +175,8 @@ export default function App() {
             visualIndication === "rays" ||
             visualIndication === "glow" ||
             visualIndication === "illuminated" ||
-            visualIndication === "pedestal"
+            visualIndication === "pedestal" ||
+            visualIndication === "H&B"
         ) {
             //the hand that must take the ball is colored by the color of the ball that has to be picked up
             leftHandColor = LoR ? targetColor : "gray";
@@ -197,10 +225,16 @@ export default function App() {
                     {scene === "lamp" && <LampScene scene={[scene, setScene]} />}
                     {scene === "hover" && <HoverScene scene={[scene, setScene]} />}
                     {scene === "collision" && (
-                        <InsideScene scene={[scene, setScene]} eventHandler={eventHandler} />
+                        <InsideScene
+                            scene={[scene, setScene]}
+                            eventHandler={eventHandler}
+                            leftHandGeom={LeftHandGeomRef}
+                            rightHandGeom={RightHandGeomRef}
+                        />
                     )}
                     <FlyPlayer xrOrigin={xrOrigin} />
                     <RotatePlayer />
+                    <MovePlayer xrOrigin={xrOrigin}></MovePlayer>
                 </XR>
             </Canvas>
         </div>
