@@ -6,7 +6,7 @@ import * as THREE from "three";
 /**
   * create an oriented arrow by changing the form of its "tail"
  * @param LoR boolean indicating if the ball has to be taken with the left or the right hand
- * @param position poisition of the ball relative to the the table
+ * @param position poisition of the ball in world coordinates
  */
 export function OrientedArrow2({ LoR, position }: { LoR: boolean; position: THREE.Vector3 }) {
     //create the triangle of the arrow

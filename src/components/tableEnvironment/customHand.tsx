@@ -3,9 +3,11 @@ import { useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
 
 /**
- * create an oriented arrow by rotating it
+ * create a fantom hand on the ball
  * @param LoR boolean indicating if the ball has to be taken with the left or the right hand
- * @param position poisition of the ball relative to the the table
+ * @param position poisition of the ball in world coordinates
+ * @param handModel model of the hand to be displayed
+ * 
  */
 export function CustomHand({
     LoR,
@@ -42,12 +44,13 @@ export function CustomHand({
         setCameraPosition(position);
     });
 
-    // Réf. pour appliquer la rotation dynamiquement
     const groupRef = useRef<THREE.Group>(null);
 
+    //updates rotation of the hand around the ball when we change camera position
     useEffect(() => {
         if (!groupRef.current) return;
 
+        //original rotation
         const baseEuler = LoR
             ? new THREE.Euler(Math.PI-Math.PI/5, -Math.PI / 10, Math.PI / 3)
             : new THREE.Euler(Math.PI-Math.PI/5, Math.PI / 10, -Math.PI / 3);
@@ -58,7 +61,7 @@ export function CustomHand({
             0
         );
 
-        // Appliquer la rotation Y puis la rotation de base
+        //apply rotation related to the camera position
         const finalQuat = new THREE.Quaternion()
             .setFromEuler(rotationAroundY)
             .multiply(new THREE.Quaternion().setFromEuler(baseEuler));
@@ -70,7 +73,7 @@ export function CustomHand({
         <group
             ref={groupRef}
             position={[
-                //make the arrow always on the correct side (Left or Right) regardless of the user position
+                //make the hand always on the correct side (Left or Right) regardless of the user position
                 LoR
                     ? -Math.cos(angle.current + Math.PI / 4) * 0.1
                     : Math.cos(angle.current - Math.PI / 4) * 0.1,

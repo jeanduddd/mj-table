@@ -393,6 +393,7 @@ export function Ball({
                             </mesh>
                         </>
                     ) : null}
+                    {/*selected visual indication is hands and balls. The only indication is the color of the hand matches the color of the ball */}
                     {visualIndication === "H&B" ? (
                         <mesh position={[index * 0.35 - 0.35, height, 0]}>
                             <sphereGeometry args={[0.15, 32, 32]} />
@@ -411,6 +412,7 @@ export function Ball({
                             )}
                         </mesh>
                     ) : null}
+                    {/*selected visual indication is hands on ball. A fantom hand is placed on the ball to pick up */}
                     {visualIndication === "handsOnBall" ? (
                         <mesh position={spherePos}>
                             <sphereGeometry args={[0.15, 32, 32]} />
@@ -428,22 +430,11 @@ export function Ball({
                                 <meshStandardMaterial color={value.color}></meshStandardMaterial>
                             )}
 
-                            <group
-                                //position={value.LoR ? [-0.08, 0.1, 0.05] : [0.08, 0.1, 0.05]}
-                                // rotation={
-                                //     value.LoR
-                                //         ? [(Math.PI / 6) * 4, -Math.PI / 4.5, Math.PI / 6]
-                                //         : [(Math.PI / 6) * 4, Math.PI / 4.5, -Math.PI / 6]
-                                // }
-                            >
-                                <CustomHand
-                                    LoR={value.LoR!}
-                                    position={spherePosInWorld}
-                                    handModel={handModel}
-                                ></CustomHand>
-                            </group>
-
-                            {/*<CustomHand side="left" color={"gray"}></CustomHand>*/}
+                            <CustomHand
+                                LoR={value.LoR!}
+                                position={spherePosInWorld}
+                                handModel={handModel}
+                            ></CustomHand>
                         </mesh>
                     ) : null}
                 </>

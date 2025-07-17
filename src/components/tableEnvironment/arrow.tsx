@@ -5,7 +5,7 @@ import * as THREE from "three";
 /**
  * create a colored and moving arrow that follows the user
  * @param color color of the arrow
- * @param position poisition of the ball relative to the the table
+ * @param position poisition of the ball in world coordinates
  */
 export function Arrow({ color, position }: { color: string; position: THREE.Vector3 }) {
     //create the triangle of the arrow
