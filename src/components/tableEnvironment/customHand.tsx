@@ -49,10 +49,14 @@ export function CustomHand({
         if (!groupRef.current) return;
 
         const baseEuler = LoR
-            ? new THREE.Euler((Math.PI / 6) * 3, -Math.PI / 4.5, Math.PI / 6)
-            : new THREE.Euler((Math.PI / 6) * 3, Math.PI / 4.5, -Math.PI / 6);
+            ? new THREE.Euler(Math.PI-Math.PI/5, -Math.PI / 10, Math.PI / 3)
+            : new THREE.Euler(Math.PI-Math.PI/5, Math.PI / 10, -Math.PI / 3);
 
-        const rotationAroundY = new THREE.Euler(0, 0, 0); //new THREE.Euler(0, angle.current, 0);
+        const rotationAroundY = new THREE.Euler(
+            0,
+            LoR ? angle.current + Math.PI / 4 : angle.current - Math.PI / 4,
+            0
+        );
 
         // Appliquer la rotation Y puis la rotation de base
         const finalQuat = new THREE.Quaternion()
@@ -66,14 +70,23 @@ export function CustomHand({
         <group
             ref={groupRef}
             position={[
-                LoR ? -Math.cos(angle.current) * 0.1 : Math.cos(angle.current) * 0.1,
+                //make the arrow always on the correct side (Left or Right) regardless of the user position
+                LoR
+                    ? -Math.cos(angle.current + Math.PI / 4) * 0.1
+                    : Math.cos(angle.current - Math.PI / 4) * 0.1,
                 0.1,
-                LoR ? Math.sin(angle.current) * 0.1 : -Math.sin(angle.current) * 0.1
+                LoR
+                    ? Math.sin(angle.current + Math.PI / 4) * 0.1
+                    : -Math.sin(angle.current - Math.PI / 4) * 0.1
             ]}
         >
             {handModel.current && (
                 <mesh geometry={handModel.current}>
-                    <meshStandardMaterial color={LoR ? "pink" : "lightgreen"} />
+                    <meshStandardMaterial
+                        transparent
+                        opacity={0.7}
+                        color={LoR ? "pink" : "lightgreen"}
+                    />
                 </mesh>
             )}
         </group>
