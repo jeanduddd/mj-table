@@ -7,7 +7,7 @@ import * as THREE from "three";
  * @param LoR boolean indicating if the ball has to be taken with the left or the right hand
  * @param position poisition of the ball in world coordinates
  * @param handModel model of the hand to be displayed
- * 
+ *
  */
 export function CustomHand({
     LoR,
@@ -52,8 +52,8 @@ export function CustomHand({
 
         //original rotation
         const baseEuler = LoR
-            ? new THREE.Euler(Math.PI-Math.PI/5, -Math.PI / 10, Math.PI / 3)
-            : new THREE.Euler(Math.PI-Math.PI/5, Math.PI / 10, -Math.PI / 3);
+            ? new THREE.Euler(Math.PI - Math.PI / 5, -Math.PI / 10, Math.PI / 3)
+            : new THREE.Euler(Math.PI - Math.PI / 5, Math.PI / 10, -Math.PI / 3);
 
         const rotationAroundY = new THREE.Euler(
             0,
@@ -71,6 +71,7 @@ export function CustomHand({
 
     return (
         <group
+            //reduce *0.1 to make the hand closer to the center of the ball (for little balls) and scale the hand if necessary
             ref={groupRef}
             position={[
                 //make the hand always on the correct side (Left or Right) regardless of the user position

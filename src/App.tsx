@@ -15,7 +15,6 @@ import { FeedbackEffectChangedEvent } from "./events/feedbackEffectChangedEvent"
 import { VisualIndicationChangedEvent } from "./events/visualIndicationChangedEvent";
 
 import "./style/App.css";
-import { MovePlayer } from "./xrControls/MovePlayer";
 
 const LeftHandGeomRef = { current: null };
 
@@ -234,7 +233,6 @@ export default function App() {
                     )}
                     <FlyPlayer xrOrigin={xrOrigin} />
                     <RotatePlayer />
-                    <MovePlayer xrOrigin={xrOrigin}></MovePlayer>
                 </XR>
             </Canvas>
         </div>

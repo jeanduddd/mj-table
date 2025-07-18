@@ -89,7 +89,7 @@ export function Menu({
                 <Container width={120} flexDirection={"column"} alignItems={"center"}>
                     <Text
                         fontSize={10}
-                        width="60%"
+                        width="75%"
                         textAlign="center"
                         color={"white"}
                         marginTop={11}

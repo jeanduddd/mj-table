@@ -6,7 +6,7 @@ import { useXRInputSourceState } from "@react-three/xr";
 import { Menu } from "../components/menu/selectMenuComponent";
 import { Lamp } from "../components/tableEnvironment/lamp";
 import { Ball } from "../components/tableEnvironment/balls";
-import { isPinching, isPinchingMiddle } from "../utilities/handState";
+import { isPinchingMiddle } from "../utilities/handState";
 
 import { HandChangedEvent } from "../events/handChangedEvent";
 import { VisualIndicationChangedEvent } from "../events/visualIndicationChangedEvent";
@@ -257,7 +257,7 @@ export function InsideScene({
 
     //define the current feedback/indication when we start the program
     const [feedbackEffect, setFeedbackEffect] = useState("gray");
-    const [visualIndication, setVisualIndication] = useState("handsOnBall");
+    const [visualIndication, setVisualIndication] = useState("arrows");
 
     //create an event and notify the parent component that the visual indication has changed
     useEffect(() => {
